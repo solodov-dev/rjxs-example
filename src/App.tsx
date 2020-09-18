@@ -1,23 +1,27 @@
-import React from 'react';
+import React, { useEffect, useState } from 'react';
 import logo from './logo.svg';
 import './App.css';
+import Button from './Button';
+import game from './Game';
 
 function App() {
+  const [value, setValue] = useState<number>();
+
+  useEffect(() => {
+    const subscriber = game.subscribe(setValue);
+    return () => subscriber.unsubscribe();
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, []);
+
   return (
     <div className="App">
       <header className="App-header">
         <img src={logo} className="App-logo" alt="logo" />
+        <h1>Your number is {value}</h1>
         <p>
           Edit <code>src/App.tsx</code> and save to reload.
         </p>
-        <a
-          className="App-link"
-          href="https://reactjs.org"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          Learn React
-        </a>
+        <Button gameInstance={game} />
       </header>
     </div>
   );
